@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="corFundoIcone">#74f907</color>
+    <color name="corFundoTitulo">#26810a</color>
+    <color name="corFundoDescricao">#FFC2D7</color>
+
 </resources>
