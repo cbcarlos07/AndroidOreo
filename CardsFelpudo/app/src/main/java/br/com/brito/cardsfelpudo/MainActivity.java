@@ -1,22 +1,26 @@
 package br.com.brito.cardsfelpudo;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     String[] listaNomes     = {"Felpudo","Fofura", "Lesmo", "Bugado", "Uruca", "Racing", "iOS", "Android", "Realidade Aumentada", "SoundFX", "3D Studio Max", "Games" };
-    int[]    listaIcones    = {R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo,
-                               R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo,R.drawable.felpudo};
+    int[]    listaIcones    = {R.drawable.felpudo,R.drawable.fofura,R.drawable.lesmo,R.drawable.bugado,R.drawable.uruca,R.drawable.carrinho,
+                               R.drawable.ios,R.drawable.android,R.drawable.realidade_aumentada,R.drawable.sound_fx,R.drawable.max,R.drawable.games};
     String[] listaDescricao = {"Felpudo","Fofura", "Lesmo", "Bugado", "Uruca", "Racing", "iOS", "Android", "Realidade Aumentada", "SoundFX", "3D Studio Max", "Games" };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
         ListView minhaLista = findViewById( R.id.minhaLista );
-        MeuAdaptador meuAdaptador;
+        final MeuAdaptador meuAdaptador;
         meuAdaptador = new MeuAdaptador( getApplicationContext(), R.layout.minha_celula );
         int i = 0;
         for ( String nome: listaNomes ){
@@ -45,6 +49,35 @@ public class MainActivity extends AppCompatActivity {
 
         minhaLista.setAdapter( meuAdaptador );
 
+        minhaLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(MainActivity.this, ""+listaNomes[position], Toast.LENGTH_SHORT).show();
+                DadosPersonagem personagem;
+                personagem = (DadosPersonagem)  meuAdaptador.getItem( position );
+                criaAlerta( personagem );
+            }
+        });
+
+    }
+
+    private void criaAlerta( DadosPersonagem dadosPersonagem ){
+        AlertDialog.Builder meuAlerta;
+        meuAlerta = new AlertDialog.Builder( MainActivity.this );
+        meuAlerta.setTitle( dadosPersonagem.getTitulo() );
+        meuAlerta.setMessage( dadosPersonagem.getDescricao() );
+
+        meuAlerta.setCancelable( true );
+        meuAlerta.setIcon( dadosPersonagem.getIcone() );
+
+        meuAlerta.setPositiveButton("Confirma", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, "Confirma", Toast.LENGTH_SHORT).show();
+            }
+        });
+        meuAlerta.create();
+        meuAlerta.show();
     }
 }
 
@@ -101,13 +134,13 @@ class MeuAdaptador extends ArrayAdapter{
         minhaView = convertView;
         ViewPersonagem viewPersonagem;
         if( convertView == null ){
-            LayoutInflater inflater = ( LayoutInflater ) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = ( LayoutInflater ) this.getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
             minhaView = inflater.inflate( R.layout.minha_celula, parent, false );
 
             viewPersonagem = new ViewPersonagem();
-            viewPersonagem.icone      = ( ImageView ) minhaView.findViewById( R.id.meuIcone );
-            viewPersonagem.titulo     = ( TextView )  minhaView.findViewById( R.id.meuTitulo );
-            viewPersonagem.descricao  = ( TextView )  minhaView.findViewById( R.id.meuDescricao );
+            viewPersonagem.icone      =  minhaView.findViewById( R.id.meuIcone );
+            viewPersonagem.titulo     =  minhaView.findViewById( R.id.meuTitulo );
+            viewPersonagem.descricao  =  minhaView.findViewById( R.id.meuDescricao );
 
             minhaView.setTag( viewPersonagem );
         }else{
