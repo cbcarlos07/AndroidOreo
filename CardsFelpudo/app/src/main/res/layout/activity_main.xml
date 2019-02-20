@@ -38,7 +38,7 @@
 
         <ListView
             android:id="@+id/minhaLista"
-            android:layout_width="395dp"
+            android:layout_width="match_parent"
             android:layout_height="419dp"
             android:background="@android:color/holo_blue_dark"
             tools:layout_editor_absoluteX="8dp"
