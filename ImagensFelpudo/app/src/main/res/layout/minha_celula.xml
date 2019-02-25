@@ -16,7 +16,7 @@
         app:srcCompat="@drawable/felpudo" />
 
     <TextView
-        android:id="@+id/meuNome"
+        android:id="@+id/meuTitulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_dark"
@@ -25,6 +25,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/meuIcone" />
+
 </android.support.constraint.ConstraintLayout>
