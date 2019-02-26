@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/addTarefa"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        tools:listitem="@layout/celula_tarefa"/>
 
     <Button
         android:id="@+id/addTarefa"
