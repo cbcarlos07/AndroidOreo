@@ -9,10 +9,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import br.com.brito.listadetarefas.db.TaskContract;
@@ -28,7 +30,19 @@ public class MainActivity extends AppCompatActivity {
         helper = new TaskDBHelper( this );
         listaTarefas = findViewById( R.id.listaTarefas );
         Button addTarefa = findViewById( R.id.addTarefa );
-
+        listaTarefas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView textoTarefa = view.findViewById( R.id.textoTarefa );
+                String tarefa = textoTarefa.getText().toString();
+                String sql = String.format( "DELETE FROM %s WHERE %s = '%s'", TaskContract.TABLE, TaskContract.Columns.TAREFA, tarefa );
+                SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+                sqLiteDatabase.execSQL( sql );
+                Toast.makeText( MainActivity.this, "Tarefa excluida com sucesso!", Toast.LENGTH_LONG ).show();
+                updateUI();
+                return false;
+            }
+        });
         addTarefa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
