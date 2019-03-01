@@ -1,0 +1,20 @@
+{
+    "nome": "Carlos Bruno",
+    "sobrenome": "Brito",
+    "idade": 23,
+    "ativo": true,
+    "listaNum": [1,10,3,50],
+    "listaObjetos": [{
+        "pergunta": "abc",
+        "respostaA": "xxx",
+        "respB": "abcd"   
+    },{
+        "pergunta": "abc",
+        "respostaA": "xxx",
+        "respB": "abcd"   
+    },{
+        "pergunta": "abc",
+        "respostaA": "xxx",
+        "respB": "abcd"   
+    }]
+}
