@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,16 +19,46 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     StringBuilder meuJSONBuilder = new StringBuilder();
     String meuJSON;
+
+    RadioGroup  radioGroup;
+    RadioButton radioButton1;
+    RadioButton radioButton2;
+    RadioButton radioButton3;
+    ArrayList<Questao> questoes;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String minhaUrl = "http://www.json-generator.com/api/json/get/ceaALaXlGq?indent=2";
+        questoes = new ArrayList<Questao>();
+        radioGroup = findViewById( R.id.meuGrupo );
+        radioButton1 = findViewById( R.id.radioButton );
+        radioButton2 = findViewById( R.id.radioButton2 );
+        radioButton3 = findViewById( R.id.radioButton3 );
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.radioButton:
+                            Log.i("meuLog", "Botao 1 clicado");
+                        break;
+                    case R.id.radioButton2:
+                            Log.i("meuLog", "Botao 2 clicado");
+                        break;
+                    case R.id.radioButton3:
+                            Log.i("meuLog", "Botao 3 clicado");
+                        break;
+                }
+            }
+        });
+        /*
         meuJSONBuilder.append("{");
         meuJSONBuilder.append(" \"nome\": \"Carlos Bruno\",");
         meuJSONBuilder.append(" \"sobrenome\": \"Brito\",");
@@ -59,20 +91,8 @@ public class MainActivity extends AppCompatActivity {
         //Log.i("meuLog", meuJSON);
 
 
-       /* try {
-            JSONObject listaJSON = new JSONObject(meuJSON);
-            JSONArray listaCursos = listaJSON.getJSONArray("cursos");
-            for (int i = 0; i < listaCursos.length(); i++){
-                JSONObject curso = listaCursos.getJSONObject(i);
-                Log.i("meuLog", curso.getString("nome"));
-                Log.i("meuLog", ""+curso.getInt("aulas"));
-                Log.i("meuLog", ""+curso.getString("completo"));
-            }
 
-        }catch (JSONException e){
-            e.printStackTrace();
-        }*/
-        new JSONTask().execute("http://www.json-generator.com/api/json/get/bZeGzhedbC?indent=2");
+        new JSONTask().execute("https://www.json-generator.com/api/json/get/bZeGzhedbC?indent=2"); */
     }
 
     private class JSONTask extends AsyncTask<String, String, String> {
@@ -127,31 +147,29 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
 
-            Log.i("meuLog",""+result);
-            /*
+           // Log.i("meuLog",""+result);
+
         try {
-            JSONObject listaJson = new JSONObject(result);
-           // titulo.setText(listaJson.getString("titulo"));
-            JSONArray questionario = listaJson.getJSONArray("questionario");
 
-            for(int i=0; i<questionario.length(); i++){
-                JSONObject questao = questionario.getJSONObject(i);
-
-                String perg = questao.getString("Pergunta");
-                String ra = questao.getString("respA");
-                String rb = questao.getString("respB");
-                String rc = questao.getString("respC");
-                int correta = questao.getInt("correta");
-
-               // Questao minhaQuestao = new Questao(perg,ra,rb,rc,correta);
-               // questoes.add(minhaQuestao);
-
+            JSONObject listaJSON = new JSONObject(result);
+            Log.i("meuLog", ""+listaJSON.getString("nome"));
+            Log.i("meuLog", ""+listaJSON.getString("sobrenome"));
+            Log.i("meuLog", ""+listaJSON.getInt("idade"));
+            Log.i("meuLog", ""+listaJSON.getBoolean("ativo"));
+            JSONArray listaCursos = listaJSON.getJSONArray("listaObjetos");
+            for (int i = 0; i < listaCursos.length(); i++){
+                JSONObject curso = listaCursos.getJSONObject(i);
+                Log.i("meuLog", curso.getString("respostaA"));
+                Log.i("meuLog", ""+curso.getString("pergunta"));
+                Log.i("meuLog", ""+curso.getString("respB"));
             }
+
+
 
             //atualizaView();
 
         }catch (JSONException e){e.printStackTrace();}
-        */
+
         }
     }
 }

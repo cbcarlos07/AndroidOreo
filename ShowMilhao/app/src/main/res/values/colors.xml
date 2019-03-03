@@ -3,4 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="corAmarelo">#ebeb24</color>
+    <color name="corFundo">#3eaaf1</color>
+
 </resources>
