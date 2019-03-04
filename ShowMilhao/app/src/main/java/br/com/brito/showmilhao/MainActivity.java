@@ -1,11 +1,20 @@
 package br.com.brito.showmilhao;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -24,77 +33,162 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     StringBuilder meuJSONBuilder = new StringBuilder();
     String meuJSON;
+    ProgressBar progressBar;
 
     RadioGroup  radioGroup;
     RadioButton radioButton1;
     RadioButton radioButton2;
     RadioButton radioButton3;
     ArrayList<Questao> questoes;
-
-
+    TextView tvPergunta;
+    TextView tvTitulo;
+    Button   botaoCofnirma;
+    int rodada = 0;
+    int acertos = 0;
+    int resposta = 0;
+    Animation some;
+    Animation aparece;
+    ConstraintLayout meuLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String minhaUrl = "http://www.json-generator.com/api/json/get/ceaALaXlGq?indent=2";
+        String minhaUrl = "https://www.json-generator.com/api/json/get/ceaALaXlGq?indent=2";
         questoes = new ArrayList<Questao>();
         radioGroup = findViewById( R.id.meuGrupo );
         radioButton1 = findViewById( R.id.radioButton );
         radioButton2 = findViewById( R.id.radioButton2 );
         radioButton3 = findViewById( R.id.radioButton3 );
+        tvPergunta   = findViewById( R.id.tvPergunta );
+        tvTitulo     = findViewById( R.id.tvTitulo );
+        progressBar  = findViewById( R.id.progressBar );
+        botaoCofnirma = findViewById( R.id.botaoConfirma );
+        meuLayout     = findViewById( R.id.meuLayout );
+        some          = new AlphaAnimation(1,0);
+        aparece       = new AlphaAnimation(0,1);
+
+        some.setDuration(1000);
+        aparece.setDuration( 1000 );
+
+        meuLayout.setVisibility( View.GONE );
+
+        meuLayout.startAnimation( aparece );
+
+
+        aparece.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                meuLayout.setVisibility( View.VISIBLE );
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                progressBar.setVisibility( View.GONE );
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+    some.setAnimationListener(new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+            meuLayout.setVisibility( View.VISIBLE );
+            progressBar.setVisibility( View.VISIBLE );
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+            if(rodada>=questoes.size()){
+                fimDeJogo();
+            }else{
+                atualizaView();
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.radioButton:
-                            Log.i("meuLog", "Botao 1 clicado");
+                            resposta = 1;
                         break;
                     case R.id.radioButton2:
-                            Log.i("meuLog", "Botao 2 clicado");
+                            resposta = 2;
                         break;
                     case R.id.radioButton3:
-                            Log.i("meuLog", "Botao 3 clicado");
+                            resposta = 3;
                         break;
                 }
+                botaoCofnirma.setEnabled( true );
             }
         });
-        /*
-        meuJSONBuilder.append("{");
-        meuJSONBuilder.append(" \"nome\": \"Carlos Bruno\",");
-        meuJSONBuilder.append(" \"sobrenome\": \"Brito\",");
-        meuJSONBuilder.append(" \"idade\": 23,");
-        meuJSONBuilder.append(" \"ativo\": true,");
-
-        meuJSONBuilder.append("\"cursos\": [{");
-        meuJSONBuilder.append("\"nome\": \"Android\",");
-        meuJSONBuilder.append("\"aulas\": 25,");
-        meuJSONBuilder.append("\"completo\": false");
-        meuJSONBuilder.append("},");
-        meuJSONBuilder.append("{\"nome\": \"iOS\",");
-        meuJSONBuilder.append("\"aulas\": 50,");
-        meuJSONBuilder.append("\"completo\": false");
-        meuJSONBuilder.append("},");
-        meuJSONBuilder.append("{\"nome\": \"3D Studio Max\",");
-        meuJSONBuilder.append("\"aulas\": 25,");
-        meuJSONBuilder.append("\"completo\": false");
-        meuJSONBuilder.append("},");
-        meuJSONBuilder.append("{\"nome\": \"Unity3D\",");
-        meuJSONBuilder.append("\"aulas\": 12,");
-        meuJSONBuilder.append("\"completo\": true");
-        meuJSONBuilder.append("}");
-        meuJSONBuilder.append("]");
-
-        meuJSONBuilder.append("}");
-
-        meuJSON = meuJSONBuilder.toString();
-        meuJSON = "";
-        //Log.i("meuLog", meuJSON);
 
 
+        new JSONTask().execute( minhaUrl );
 
-        new JSONTask().execute("https://www.json-generator.com/api/json/get/bZeGzhedbC?indent=2"); */
+        botaoCofnirma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                proximaPergunta();
+            }
+        });
+
+
     }
 
+    void proximaPergunta(){
+        if( resposta == questoes.get(rodada).getCorreta() ){
+            acertos++;
+        }
+
+        rodada++;
+        meuLayout.startAnimation( some );
+    }
+    void fimDeJogo(){
+        meuLayout.setVisibility(View.GONE);
+        progressBar.setVisibility( View.GONE );
+        //Toast.makeText(this, "Pontuação: "+acertos, Toast.LENGTH_SHORT).show();
+        criaAlerta();
+    }
+    void criaAlerta(){
+        AlertDialog.Builder alerta;
+        alerta = new AlertDialog.Builder( MainActivity.this );
+        alerta.setTitle( "Fim de Jogo" );
+        alerta.setMessage("Você marcou "+acertos+" pontos");
+        alerta.setIcon( R.drawable.interrogacao );
+        alerta.setCancelable( false );
+        alerta.setPositiveButton("Jogar novamente", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                acertos = 0;
+                rodada = 0;
+                atualizaView();
+            }
+        });
+        alerta.create();
+        alerta.show();
+    }
+    public void  atualizaView(){
+        progressBar.setVisibility( View.GONE );
+        radioGroup.clearCheck();
+        botaoCofnirma.setEnabled( false );
+        tvPergunta.setText( questoes.get( rodada ).getPergunta() );
+        radioButton1.setText( questoes.get( rodada ).getRespA() );
+        radioButton2.setText( questoes.get( rodada ).getRespB() );
+        radioButton3.setText( questoes.get( rodada ).getRespC() );
+        meuLayout.startAnimation( aparece );
+    }
     private class JSONTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -152,21 +246,24 @@ public class MainActivity extends AppCompatActivity {
         try {
 
             JSONObject listaJSON = new JSONObject(result);
-            Log.i("meuLog", ""+listaJSON.getString("nome"));
-            Log.i("meuLog", ""+listaJSON.getString("sobrenome"));
-            Log.i("meuLog", ""+listaJSON.getInt("idade"));
-            Log.i("meuLog", ""+listaJSON.getBoolean("ativo"));
-            JSONArray listaCursos = listaJSON.getJSONArray("listaObjetos");
-            for (int i = 0; i < listaCursos.length(); i++){
-                JSONObject curso = listaCursos.getJSONObject(i);
-                Log.i("meuLog", curso.getString("respostaA"));
-                Log.i("meuLog", ""+curso.getString("pergunta"));
-                Log.i("meuLog", ""+curso.getString("respB"));
+            tvTitulo.setText( listaJSON.getString("titulo") );
+
+            JSONArray questionario = listaJSON.getJSONArray("questionario");
+            for (int i = 0; i < questionario.length(); i++){
+                JSONObject questionary = questionario.getJSONObject(i);
+                String pergunta = questionary.getString("pergunta");
+                String respA    = questionary.getString("respA");
+                String respB    = questionary.getString("respB");
+                String respC    = questionary.getString("respC");
+                int    correta  = questionary.getInt("correta");
+                Questao questao = new Questao( pergunta, respA, respB, respC, correta );
+                questoes.add( questao );
+
             }
 
 
 
-            //atualizaView();
+            atualizaView();
 
         }catch (JSONException e){e.printStackTrace();}
 
