@@ -22,7 +22,7 @@
             android:background="@color/colorAccent">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/titulo_celula"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
@@ -33,14 +33,27 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imagem_celula"
                 android:layout_width="0dp"
                 android:layout_height="101dp"
-                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/titulo_celula"
                 app:srcCompat="@drawable/interrogacao" />
+
+            <TextView
+                android:id="@+id/data_exib"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="@android:color/background_dark"
+                app:layout_constraintBottom_toBottomOf="@+id/imagem_celula"
+                app:layout_constraintEnd_toEndOf="@+id/imagem_celula"
+                app:layout_constraintStart_toStartOf="@+id/imagem_celula" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>
