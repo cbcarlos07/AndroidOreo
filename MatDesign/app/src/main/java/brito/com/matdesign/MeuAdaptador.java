@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
@@ -15,10 +16,12 @@ public class MeuAdaptador extends RecyclerView.Adapter {
 
     ArrayList<Episodio> episodios;
     Context context;
+    OnItemClickListener listener;
 
-    public MeuAdaptador(Context context, ArrayList<Episodio> episodios) {
+    public MeuAdaptador(Context context, ArrayList<Episodio> episodios, OnItemClickListener listener) {
         this.episodios = episodios;
         this.context   = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,10 +40,16 @@ public class MeuAdaptador extends RecyclerView.Adapter {
         meuViewHolder.data_exib.setText( meuEpisodio.getData_exib() );
         meuViewHolder.imageView.setImageResource( R.drawable.interrogacao );
 
+        meuViewHolder.bind( episodios.get(i), listener );
+
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return episodios.size();
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(Episodio episodio);
     }
 }

@@ -15,4 +15,12 @@ public class MeuViewHolder extends RecyclerView.ViewHolder {
         titulo = itemView.findViewById(R.id.titulo_celula);
         data_exib = itemView.findViewById(R.id.data_exib);
     }
+    public void bind( final Episodio item, final MeuAdaptador.OnItemClickListener listener ){
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(item);
+            }
+        });
+    }
 }
