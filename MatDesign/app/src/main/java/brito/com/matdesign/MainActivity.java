@@ -1,5 +1,6 @@
 package brito.com.matdesign;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerView;
     ArrayList<Episodio> episodios;
+    FloatingActionButton floatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById( R.id.minharecview );
         toolbar = findViewById( R.id.minhaToolbar );
+        floatingActionButton = findViewById( R.id.meuFAB );
+        
+        
         setSupportActionBar( toolbar );
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //recyclerView.setAda
@@ -45,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager( layoutManager );
+        
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "FLOAT BUTTON", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

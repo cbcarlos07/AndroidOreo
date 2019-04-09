@@ -19,7 +19,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/minhaToolbar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/minhaToolbar"
@@ -35,16 +36,14 @@
         app:title="Carlos Bruno" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton5"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:id="@+id/meuFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-
         android:clickable="true"
-        android:scaleType="center"
-        android:src="@drawable/fofura"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/fofura" />
 
 </android.support.constraint.ConstraintLayout>
