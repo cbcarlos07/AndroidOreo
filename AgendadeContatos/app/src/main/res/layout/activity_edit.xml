@@ -8,7 +8,7 @@
 
     <ImageButton
         android:id="@+id/fotoContato"
-        android:layout_width="150dp"
+        android:layout_width="125dp"
         android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -20,20 +20,22 @@
 
     <EditText
         android:id="@+id/nomeContato"
-        android:layout_width="235dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Nome"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/fotoContato"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fotoContato"
         app:layout_constraintTop_toTopOf="@+id/fotoContato" />
 
     <EditText
         android:id="@+id/endContato"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -53,7 +55,7 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Fone"
-        android:inputType="textPersonName"
+        android:inputType="text|phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +70,7 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="E-mail"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/foneContato" />
