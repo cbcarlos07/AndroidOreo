@@ -24,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                Intent i = new Intent( MainActivity.this, EditActivity.class );
+               ContatoInfo teste = new ContatoInfo();
+               teste.setNome("Contato teste");
+               teste.setEmail("contato@email.com");
+               i.putExtra( "contato", teste );
                startActivity( i );
             }
         });
