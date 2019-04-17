@@ -2,6 +2,7 @@ package br.com.brito.agendadecontatos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final int REQUEST_NEW = 1;
+    private final int REQUEST_ALTER = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +33,19 @@ public class MainActivity extends AppCompatActivity {
                teste.setNome("Contato teste");
                teste.setEmail("contato@email.com");
                i.putExtra( "contato", teste );
-               startActivity( i );
+               startActivityForResult( i, REQUEST_NEW );
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if( requestCode == REQUEST_NEW && resultCode == RESULT_OK ){
+            //criar contato
+        }else if( requestCode == REQUEST_ALTER && resultCode == RESULT_OK ){
+            //alterar contato
+        }
     }
 
     @Override
