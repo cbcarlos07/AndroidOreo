@@ -4,15 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class ContatoInfo implements Parcelable {
+    private Long id = -1L;
     private String nome  = "";
     private String ref   = "";
     private String email = "";
     private String fone  = "";
     private String end   = "";
     private String foto  = "";
+
     public ContatoInfo(){}
     private ContatoInfo(Parcel in){
-        String[] data = new String[6];
+        String[] data = new String[7];
         in.readStringArray(data);
         setNome(data[0]);
         setRef(data[1]);
@@ -20,6 +22,15 @@ public class ContatoInfo implements Parcelable {
         setFone(data[3]);
         setEnd(data[4]);
         setFoto(data[5]);
+        setId( Long.parseLong( data[6] ) );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -78,7 +89,7 @@ public class ContatoInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray( new String[]{
-            getNome(), getRef(), getEmail(), getFone(), getEnd(), getFoto()
+            getNome(), getRef(), getEmail(), getFone(), getEnd(), getFoto(), String.valueOf( getId() )
         });
     }
     public static final Parcelable.Creator<ContatoInfo> CREATOR= new Parcelable.Creator<ContatoInfo>(){
