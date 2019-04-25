@@ -12,8 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
 
+public class MainActivity extends AppCompatActivity {
+    private ContatoDAO helper;
+    private List<ContatoInfo> listaContatos;
     private final int REQUEST_NEW = 1;
     private final int REQUEST_ALTER = 2;
 
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
                startActivityForResult( i, REQUEST_NEW );
             }
         });
+        helper = new ContatoDAO( this );
+        listaContatos = helper.getList("ASC");
     }
 
     @Override
@@ -43,8 +48,14 @@ public class MainActivity extends AppCompatActivity {
         //super.onActivityResult(requestCode, resultCode, data);
         if( requestCode == REQUEST_NEW && resultCode == RESULT_OK ){
             //criar contato
+            ContatoInfo contatoInfo = data.getParcelableExtra( "contato" );
+            helper.inserirContato( contatoInfo );
+            listaContatos = helper.getList( "ASC" );
         }else if( requestCode == REQUEST_ALTER && resultCode == RESULT_OK ){
             //alterar contato
+            ContatoInfo contatoInfo = data.getParcelableExtra( "contato" );
+            helper.alteraContato( contatoInfo );
+            listaContatos = helper.getList( "ASC" );
         }
     }
 
