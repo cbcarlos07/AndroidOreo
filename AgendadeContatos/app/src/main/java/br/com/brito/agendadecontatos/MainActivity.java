@@ -50,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new ContatoAdapter( listaContatos );
         contatosRecy.setAdapter( adapter );
+
+        contatosRecy.addOnItemTouchListener( new RecyclerItemClickListener( getApplicationContext() , new RecyclerItemClickListener.OnItemClickIistener() {
+            @Override
+            public void onItemClick(View view, int posicao) {
+                abrirOpcoes(listaContatos.get( posicao ));
+            }
+        }));
     }
 
     @Override
@@ -70,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
             adapter = new ContatoAdapter( listaContatos );
             contatosRecy.setAdapter( adapter );
         }
+    }
+
+    private void abrirOpcoes( ContatoInfo contato ){
+        
     }
 
     @Override
