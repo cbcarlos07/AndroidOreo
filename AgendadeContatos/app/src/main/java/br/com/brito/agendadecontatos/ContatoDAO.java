@@ -26,6 +26,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         builder.append( " ref TEXT, ");
         builder.append( " email TEXT, ");
         builder.append( " end TEXT, ");
+        builder.append( " fone TEXT, ");
         builder.append( " foto TEXT); ");
         String sql = builder.toString();
         db.execSQL(sql);
@@ -47,6 +48,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
             c.setRef( cursor.getString(cursor.getColumnIndex( "ref" )) );
             c.setEmail( cursor.getString(cursor.getColumnIndex( "email" )) );
             c.setEnd( cursor.getString(cursor.getColumnIndex( "end" )) );
+            c.setFone( cursor.getString(cursor.getColumnIndex( "fone" )) );
             c.setFoto( cursor.getString(cursor.getColumnIndex( "foto" )) );
             contatos.add( c );
         }
@@ -61,6 +63,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         values.put( "ref", c.getRef() );
         values.put( "email", c.getEmail() );
         values.put( "end", c.getEnd() );
+        values.put( "fone", c.getFone() );
         values.put( "foto", c.getFoto() );
         getWritableDatabase().insert( TABELA, null, values );
     }
@@ -72,6 +75,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         values.put("ref", c.getRef());
         values.put("email", c.getEmail());
         values.put("end", c.getEnd());
+        values.put("fone", c.getFone());
         values.put("foto", c.getFoto());
         String[] idParaAlterado = { c.getId().toString() };
         getWritableDatabase().update( TABELA, values, "id=?", idParaAlterado );
