@@ -1,14 +1,18 @@
 package br.com.brito.agendadecontatos;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,10 +27,11 @@ public class MainActivity extends AppCompatActivity {
     private List<ContatoInfo> listaContatos;
     private final int REQUEST_NEW = 1;
     private final int REQUEST_ALTER = 2;
-
+    private String order = "ASC";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         helper = new ContatoDAO( this );
-        listaContatos = helper.getList("ASC");
+        listaContatos = helper.getList( order );
         contatosRecy = findViewById( R.id.contatosRecy );
         contatosRecy.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager( this );
@@ -51,36 +56,64 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ContatoAdapter( listaContatos );
         contatosRecy.setAdapter( adapter );
 
+
         contatosRecy.addOnItemTouchListener( new RecyclerItemClickListener( getApplicationContext() , new RecyclerItemClickListener.OnItemClickIistener() {
             @Override
             public void onItemClick(View view, int posicao) {
+
                 abrirOpcoes(listaContatos.get( posicao ));
             }
         }));
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         if( requestCode == REQUEST_NEW && resultCode == RESULT_OK ){
             //criar contato
             ContatoInfo contatoInfo = data.getParcelableExtra( "contato" );
             helper.inserirContato( contatoInfo );
-            listaContatos = helper.getList( "ASC" );
+            listaContatos = helper.getList( order );
             adapter = new ContatoAdapter( listaContatos );
             contatosRecy.setAdapter( adapter );
         }else if( requestCode == REQUEST_ALTER && resultCode == RESULT_OK ){
             //alterar contato
             ContatoInfo contatoInfo = data.getParcelableExtra( "contato" );
             helper.alteraContato( contatoInfo );
-            listaContatos = helper.getList( "ASC" );
+            listaContatos = helper.getList( order );
             adapter = new ContatoAdapter( listaContatos );
             contatosRecy.setAdapter( adapter );
         }
     }
 
-    private void abrirOpcoes( ContatoInfo contato ){
-
+    private void abrirOpcoes(final ContatoInfo contato ){
+        Log.d("Log", contato.getNome());
+        AlertDialog.Builder builder = new AlertDialog.Builder( this );
+        builder.setTitle( contato.getNome() );
+        builder.setItems(new CharSequence[]{"Ligar", "Editar", "Excluir"},
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch ( which ){
+                            case 0:
+                                    Intent intent = new Intent( Intent.ACTION_DIAL );
+                                    intent.setData(Uri.parse( "tel:" + contato.getFone() ) );
+                                    startActivity( intent );
+                                break;
+                            case 1:
+                                    Intent intent1 = new Intent( MainActivity.this, EditActivity.class );
+                                    intent1.putExtra( "contato", contato );
+                                    startActivityForResult( intent1, REQUEST_ALTER );
+                                break;
+                            case 2:
+                                    listaContatos.remove( contato );
+                                    helper.apagarContato( contato );
+                                    adapter.notifyDataSetChanged();
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
     }
 
     @Override
@@ -98,10 +131,19 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.order_az) {
+            order = "ASC";
+
+        }else if( id  == R.id.order_za ){
+            order = "DESC";
+
         }
 
-        return super.onOptionsItemSelected(item);
+        listaContatos = helper.getList( order );
+        adapter = new ContatoAdapter( listaContatos );
+        contatosRecy.setAdapter( adapter );
+
+
+        return true;
     }
 }
