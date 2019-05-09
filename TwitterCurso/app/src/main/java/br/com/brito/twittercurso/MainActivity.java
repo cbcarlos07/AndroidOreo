@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usuario = dataSnapshot.child("usuario").getValue( String.class );
-                
+
                 seguindo.clear(); //limpar lista
                 for (DataSnapshot s: dataSnapshot.child("seguindo").getChildren()){
                     seguindo.add( s.getValue( String.class ) );
