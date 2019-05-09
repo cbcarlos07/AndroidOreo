@@ -1,6 +1,7 @@
 package br.com.brito.twittercurso;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> seguindo;
 
     private ListView listaTweets;
+    private TweetAdapter adapter;
 
     private ArrayList<Tweet> tweets;
 
@@ -55,11 +57,26 @@ public class MainActivity extends AppCompatActivity {
         View header = getLayoutInflater().inflate( R.layout.list_header, null );
         listaTweets.addHeaderView( header );
 
+        adapter = new TweetAdapter( this, tweets );
+        listaTweets.setAdapter( adapter );
+
+
         Button btnTweet = findViewById( R.id.btnTweet );
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 novoTweet();
+            }
+        });
+
+        Button btnSeguir = findViewById( R.id.btnSeguir );
+        btnSeguir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( uid == null ) return;
+                Intent i = new Intent( MainActivity.this, SeguirActivity.class );
+                i.putExtra( "uid", uid );
+                startActivity( i );
             }
         });
     }
@@ -75,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getUserInfo(){
-        String uid = mAuth.getCurrentUser().getUid();
+        uid = mAuth.getCurrentUser().getUid();
        // Log.d("log", uid);
         DatabaseReference userRef = database.getReference( "users/" + uid );
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -138,10 +155,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Tweet tweet = dataSnapshot.getValue( Tweet.class );
 
-               // if( seguindo.contains( tweet.getUsuario() )  || tweet.getUid().equals( uid ) ){
+                if( seguindo.contains( tweet.getUsuario() )  || tweet.getUid().equals( uid ) ){
                     tweets.add( 0, tweet ); // 0 significa no topo da lista
+                    adapter.notifyDataSetChanged();
                     Log.d( "tweet", tweet.getTexto() );
-               // }
+                }
             }
 
             @Override
