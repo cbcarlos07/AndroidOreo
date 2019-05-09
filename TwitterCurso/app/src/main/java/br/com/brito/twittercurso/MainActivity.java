@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usuario = dataSnapshot.child("usuario").getValue( String.class );
-                Log.d("tweet", "getUserInfo");
+                
                 seguindo.clear(); //limpar lista
                 for (DataSnapshot s: dataSnapshot.child("seguindo").getChildren()){
                     seguindo.add( s.getValue( String.class ) );
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
     private void setTweetListener(){
-        Log.d("tweet", "setTweetListener");
+
         tweetEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
