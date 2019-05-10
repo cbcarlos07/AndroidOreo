@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "9000228608",
+    "firebase_url": "https://twittercurso-a06b1.firebaseio.com",
+    "project_id": "twittercurso-a06b1",
+    "storage_bucket": "twittercurso-a06b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9000228608:android:f63074bb27c73e36",
+        "android_client_info": {
+          "package_name": "br.com.brito.twittercurso"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9000228608-4e1jhuplp9k02gd56efl8avbsr16dd4f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.brito.twittercurso",
+            "certificate_hash": "060ace737ae5219f0fd0fca40db73e98bb5d9e5c"
+          }
+        },
+        {
+          "client_id": "9000228608-im5p0gg51sadn3jb4k2c901s0ildidvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNnE5JEj7n4YKS9kKvjMBhpQnOtb5FdZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9000228608-im5p0gg51sadn3jb4k2c901s0ildidvt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
