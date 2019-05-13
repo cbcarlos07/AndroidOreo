@@ -15,6 +15,10 @@ public class MainClass extends ApplicationAdapter {
 	private Background back;
 	private Felpudo felpudo;
 	private Array<Pipe> pipes;
+	private float timeToNext = 1.5f;
+	private enum State { WAIT, PLAY, DIE, FINISH };
+	private State state;
+	private float timeToFinish;
 	@Override
 	public void create () {
 		viewport = new FitViewport( 1000, 1700 );
@@ -23,6 +27,7 @@ public class MainClass extends ApplicationAdapter {
 		felpudo = new Felpudo();
 		pipes = new Array<Pipe>();
 		pipes.add( new Pipe() );
+		state = State.WAIT;
 	}
 
 	@Override
@@ -42,21 +47,58 @@ public class MainClass extends ApplicationAdapter {
 	}
 
 	private void update( float delta ){
-		back.update( delta );
-		if( felpudo.update( delta ) == -1 ){
-			//perdemos
+		switch ( state ){
+			case WAIT:
+				  felpudo.update( delta );
+				  back.update( delta );
+				  if( Gdx.input.justTouched() ){
+				  	state = State.PLAY;
+				  	felpudo.fly();
+				  }
+				break;
+			case PLAY:
+				  if( felpudo.update( delta ) == -1 ){
+				  	state = State.DIE;
+				  	timeToFinish = 0.5f;
+				  }
+				  back.update( delta );
+				  timeToNext -= delta;
+				  if( timeToNext <= 0 ){
+					pipes.add( new Pipe() );
+					timeToNext = 1.5f;
+				  }
+				  for(int i = 0; i< pipes.size; i++){
+					Pipe p = pipes.get( i );
+					if( p.update( delta ) == -1 ){
+						pipes.removeIndex( i );
+						i++;
+						Gdx.app.log( "log", "Destruiu" );
+					}
+				  }
+
+				  if( Gdx.input.justTouched() ) felpudo.fly();
+				break;
+			case DIE:
+				  felpudo.update( delta );
+				  timeToFinish -= delta;
+				  if( timeToFinish <= 0 ){
+				  	state = State.FINISH;
+				  }
+				break;
+			case FINISH:
+				if( Gdx.input.justTouched() ) reset();
 		}
 
-		for(int i = 0; i< pipes.size; i++){
-			Pipe p = pipes.get( i );
-			if( p.update( delta ) == -1 ){
-				pipes.removeIndex( i );
-				i++;
-				Gdx.app.log( "log", "Destruiu" );
-			}
-		}
-		if( Gdx.input.justTouched() ) felpudo.fly();
 	}
+
+
+	private void reset(){
+		state = State.WAIT;
+		felpudo = new Felpudo();
+		pipes.clear();
+		timeToNext = 1.5f;
+	}
+
 
 	private void draw( SpriteBatch batch ){
 		back.draw( batch );
