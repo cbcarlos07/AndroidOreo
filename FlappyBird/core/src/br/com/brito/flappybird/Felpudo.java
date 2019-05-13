@@ -13,6 +13,8 @@ public class Felpudo {
 
     private Circle body;
 
+    private float speed;
+    private float acel;
     public Felpudo(){
         frames = new Texture[6];
         for (int i = 0; i < 5; i++){
@@ -22,6 +24,8 @@ public class Felpudo {
         timeToNext = 0.2f;
 
         body = new Circle( 200, 1700/2, 60 );
+        acel = 0;
+        speed = 0;
     }
 
     public void draw(SpriteBatch batch){
@@ -31,13 +35,25 @@ public class Felpudo {
 
     }
 
-    public void update( float delta ){
+    public int update( float delta ){
         timeToNext -= delta;
         if( timeToNext <= 0 ){
             curFrame += 1;
             if( curFrame >= 5 ) curFrame = 0;
             timeToNext = 0.2f;
         }
+        speed += delta * acel;
+
+        body.y += delta * speed;
+
+        if( body.y <= -100 || body.y >= 1800  ) return -1;
+
+        return 0;
+    }
+
+    public void fly(){
+        speed = 1000;
+        acel = -2000;
     }
 
 

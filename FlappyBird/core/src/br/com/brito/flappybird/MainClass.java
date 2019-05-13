@@ -24,16 +24,30 @@ public class MainClass extends ApplicationAdapter {
 	@Override
 	public void render () {
 	    float delta = Gdx.graphics.getDeltaTime();
-	    back.update( delta );
-	    felpudo.update( delta );
+		update( delta );
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.setProjectionMatrix( viewport.getCamera().combined );
 		batch.begin();
+
+		draw( batch );
+
+		batch.end();
+	}
+
+	private void update( float delta ){
+		back.update( delta );
+		if( felpudo.update( delta ) == -1 ){
+			//perdemos
+		}
+		if( Gdx.input.justTouched() ) felpudo.fly();
+	}
+
+	private void draw( SpriteBatch batch ){
 		back.draw( batch );
 		felpudo.draw( batch );
-		batch.end();
 	}
 
 	@Override
