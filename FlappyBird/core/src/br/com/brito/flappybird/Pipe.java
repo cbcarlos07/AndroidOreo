@@ -9,8 +9,10 @@ public class Pipe {
 
     private Texture img;
 
-    private Rectangle up;
-    private Rectangle down;
+    public Rectangle up;
+    public Rectangle down;
+    public Rectangle score;
+
 
     public Pipe(){
         img = new Texture( "cano.png" );
@@ -19,6 +21,7 @@ public class Pipe {
 
         up = new Rectangle( 1100, y + 200, 200, 1700 );
         down = new Rectangle( 1100, y - 200 - 1700, 200, 1700  );
+        score = new Rectangle( 1100 + 200 + 120, -200, 10, 400 );
     }
 
     public void draw(SpriteBatch batch){
@@ -31,6 +34,7 @@ public class Pipe {
         up.x += delta * SPEED;
         down.x += delta * SPEED;
         if( up.x <= -200 ) return -1;
+        score.x += delta * SPEED;
         return 0;
     }
 }

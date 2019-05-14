@@ -11,7 +11,7 @@ public class Felpudo {
     private int curFrame;
     private float timeToNext;
 
-    private Circle body;
+    public Circle body;
 
     private float speed;
     private float acel;
@@ -30,7 +30,7 @@ public class Felpudo {
 
     public void draw(SpriteBatch batch){
 
-        batch.draw( frames[ curFrame ], body.x - 60, body.y - 60, 120, 120 );
+        batch.draw( frames[ curFrame ], body.x - 60, body.y - 60, 160, 160 );
 
 
     }
@@ -54,6 +54,10 @@ public class Felpudo {
     public void fly(){
         speed = 1000;
         acel = -2000;
+    }
+
+    public void die(){
+        acel = -3000;
     }
 
 

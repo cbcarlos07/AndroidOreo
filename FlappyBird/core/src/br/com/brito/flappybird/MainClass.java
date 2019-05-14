@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,6 +20,8 @@ public class MainClass extends ApplicationAdapter {
 	private enum State { WAIT, PLAY, DIE, FINISH };
 	private State state;
 	private float timeToFinish;
+	private int score = 0;
+	private boolean counting = false;
 	@Override
 	public void create () {
 		viewport = new FitViewport( 1000, 1700 );
@@ -72,10 +75,30 @@ public class MainClass extends ApplicationAdapter {
 					if( p.update( delta ) == -1 ){
 						pipes.removeIndex( i );
 						i++;
-						Gdx.app.log( "log", "Destruiu" );
+						//Gdx.app.log( "log", "Destruiu" );
 					}
 				  }
 
+				  boolean aux = false;
+
+				  for(Pipe p: pipes){
+				  	if( Intersector.overlaps( felpudo.body, p.up ) || Intersector.overlaps( felpudo.body, p.down ) ){
+				  		state = State.DIE;
+				  		timeToFinish = 2f;
+				  		Gdx.input.vibrate( 2000 );
+				  		felpudo.die();
+					}
+				  	if( Intersector.overlaps( felpudo.body, p.score ) ){
+				  		aux = true;
+						if( !counting ){
+							score++;
+							Gdx.app.log( "log", "pontos: "+ score );
+							counting = true;
+						}
+
+					}
+				  }
+				  if( !aux ) counting = false;
 				  if( Gdx.input.justTouched() ) felpudo.fly();
 				break;
 			case DIE:
@@ -97,6 +120,8 @@ public class MainClass extends ApplicationAdapter {
 		felpudo = new Felpudo();
 		pipes.clear();
 		timeToNext = 1.5f;
+		score = 0;
+		counting = false;
 	}
 
 
