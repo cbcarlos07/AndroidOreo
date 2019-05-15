@@ -60,5 +60,11 @@ public class Felpudo {
         acel = -3000;
     }
 
+    public void dispose(){
+        for (int i = 0; i<= 5; i++){
+            frames[i].dispose();
+        }
+    }
+
 
 }

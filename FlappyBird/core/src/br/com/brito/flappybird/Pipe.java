@@ -21,7 +21,7 @@ public class Pipe {
 
         up = new Rectangle( 1100, y + 200, 200, 1700 );
         down = new Rectangle( 1100, y - 200 - 1700, 200, 1700  );
-        score = new Rectangle( 1100 + 200 + 120, -200, 10, 400 );
+        score = new Rectangle( 1100 + 200 + 120, y - 200, 10, 400 );
     }
 
     public void draw(SpriteBatch batch){
@@ -33,8 +33,12 @@ public class Pipe {
         float SPEED = -500;
         up.x += delta * SPEED;
         down.x += delta * SPEED;
-        if( up.x <= -200 ) return -1;
         score.x += delta * SPEED;
+        if( up.x <= -200 ) return -1;
+
         return 0;
+    }
+    public void dispose(){
+        img.dispose();
     }
 }
